@@ -1,37 +1,30 @@
-name: Screenshot Update
+name: Take Screenshot
 
 on:
-  schedule:
-    # 5分おきに自動実行
-    - cron: '*/5 * * * *'
-  workflow_dispatch: # 手動でも実行可能
+  workflow_dispatch:  # 手動で実行可能
 
 jobs:
   screenshot:
     runs-on: ubuntu-latest
+
     steps:
-      # リポジトリを取得
-      - uses: actions/checkout@v3
+    - uses: actions/checkout@v3
 
-      # Node.jsをセットアップ
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
 
-      # Puppeteerをインストール
-      - name: Install dependencies
-        run: npm install puppeteer
+    - name: Install dependencies
+      run: npm install
+      working-directory: myproject
 
-      # スクリーンショット取得
-      - name: Run screenshot
-        run: node screenshot.js
+    - name: Run screenshot
+      run: node screenshot.js
+      working-directory: myproject
 
-      # 取得した画像をGitHubに自動コミット
-      - name: Commit & Push screenshot
-        run: |
-          git config --local user.name "github-actions"
-          git config --local user.email "actions@github.com"
-          git add screenshot.png
-          git commit -m "Update screenshot"
-          git push
+    - name: Upload screenshot as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: screenshot
+        path: myproject/screenshot.png
