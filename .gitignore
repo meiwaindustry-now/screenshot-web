@@ -1,0 +1,12 @@
+# Node.js のキャッシュや一時ファイルを無視
+node_modules/
+.cache/
+*.log
+
+# OS 系の不要ファイル
+Thumbs.db
+.DS_Store
+
+# 他の不要なユーザーフォルダは入れない
+AppData/
+Documents/
