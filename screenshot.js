@@ -1,17 +1,22 @@
+// screenshot.js
 const puppeteer = require('puppeteer');
+const fs = require('fs');
 
 (async () => {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
+  try {
+    // ブラウザ起動
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
 
-  // ブラウザのサイズを固定（コンテンツサイズに合わせる）
-  await page.setViewport({ width: 1920, height: 1080 });
+    const page = await browser.newPage();
 
-  // 自社サイトを開く
-  await page.goto('https://solar-carport.meiwajp-dev.link/meiwa-niigata-factory', { waitUntil: 'networkidle0' });
+    // 画面サイズ設定（任意）
+    await page.setViewport({ width: 1280, height: 800 });
 
-  // スクリーンショット取得（1枚でフル）
-  await page.screenshot({ path: 'screenshot.png', fullPage: false });
+    // スクショ対象のURLを指定
+    const url = 'https://solar-carport.meiwajp-dev.link/meiwa-rental'; // ←ここを書き換えて対象ページを指定
+    await page.goto(url, { waitUntil: 'networkidle2' });
 
-  await browser.close();
-})();
+    /
